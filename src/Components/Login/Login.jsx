@@ -37,7 +37,7 @@ const Login = () => {
 
   return (
     <div className="loginParentDiv">
-      <img width="200px" height="200px" src={Logo} alt="OLX Logo" />
+      <img width="200px"  src={Logo} alt="OLX Logo" />
       <form onSubmit={handleLogin}>
         <label htmlFor="email">Email</label>
         <input

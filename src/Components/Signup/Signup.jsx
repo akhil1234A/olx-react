@@ -49,6 +49,7 @@ const SignUp = () => {
 
   return (
     <div className="signupParentDiv">
+      <img src={Logo} alt="" width='200px' />
       <form onSubmit={handleSubmit}>
         <label htmlFor="fname">Username</label>
         <input
