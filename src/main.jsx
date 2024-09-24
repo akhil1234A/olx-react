@@ -1,0 +1,16 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+import { BrowserRouter } from 'react-router-dom';
+import { FirebaseProvider } from './Context/Context.jsx'; // Use FirebaseProvider instead of direct context
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <FirebaseProvider>  {/* Wrap in FirebaseProvider */}
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </FirebaseProvider>
+  </StrictMode>
+);
