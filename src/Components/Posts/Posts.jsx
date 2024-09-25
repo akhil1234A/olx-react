@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { db } from "../../firebase/config"; // Adjust the path to your Firebase config
+import { db } from "../../firebase/config";
 import "./Posts.css";
-import Heart from "../../assets/Heart"; // Ensure this path is correct
+import Heart from "../../assets/Heart"; 
 import { useNavigate } from "react-router-dom";
-import Delete from '../../assets/Delete'
+import Delete from '../../assets/Delete';
 
-const Posts = ({ search = "" }) => { // Default value for search
+const Posts = ({ search = "" }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(5); // Number of products to show initially
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -37,21 +38,32 @@ const Posts = ({ search = "" }) => { // Default value for search
     }
   };
 
+  // Filter the products based on the search term
   const filteredProducts = products.filter(
     (product) =>
       product.name?.toLowerCase().includes(search.toLowerCase()) ||
       product.category?.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleSeeMore = () => {
+    setVisibleCount((prevCount) => prevCount + 5); // Show 4 more products
+  };
+  
   return (
     <div className="postParentDiv">
       <div className="moreView">
         <div className="heading">
           <span>Quick Menu</span>
-          <span>View more</span>
+          <span>
+            {visibleCount < filteredProducts.length && (
+              <button onClick={handleSeeMore} className="see-more">
+                See More
+              </button>
+            )}
+          </span>
         </div>
         <div className="cards">
-          {products.map((product) => (
+          {filteredProducts.slice(0, visibleCount).map((product) => (
             <div
               key={product.id}
               className="card"
@@ -64,57 +76,18 @@ const Posts = ({ search = "" }) => { // Default value for search
                     e.stopPropagation(); // Prevent card click
                     handleDelete(product.id);
                   }}
-                  style={{ cursor: 'pointer' }} // Ensure the cursor shows it's clickable
+                  style={{ cursor: 'pointer' }}
                 >
                   <Delete />
                 </span>
               </div>
-             
               <div className="image">
                 <img src={product.imageUrl} alt={product.name} />
               </div>
               <div className="content">
                 <p className="rate">&#x20B9; {product.price}</p>
-                <span className="kilometer">{product.category}</span>
+                <span className="category">{product.category}</span>
                 <p className="name">{product.name}</p>
-    
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="recommendations">
-        <div className="heading">
-          <span>Fresh recommendations</span>
-        </div>
-        <div className="cards">
-          {filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              className="card"
-              onClick={() => navigate(`/view/${product.id}`)}
-            >
-              <div className="favorite">
-              <Heart />
-              <span
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click
-                    handleDelete(product.id);
-                  }}
-                  style={{ cursor: 'pointer' }} // Ensure the cursor shows it's clickable
-                >
-                  <Delete />
-                </span>
-              </div>
-              <div className="productImage">
-                <img src={product.imageUrl} alt={product.name} />
-              </div>
-              <div className="content">
-                <p className="rate">&#x20B9; {product.price}</p>
-                <span className="productCategory">{product.category}</span>
-                <p className="productName">{product.name}</p>
-                
               </div>
             </div>
           ))}

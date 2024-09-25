@@ -1,17 +1,3 @@
-// import { createContext, useState } from "react";
-// import { auth, db } from "../firebase/config"; // Importing auth and db directly
-
-// export const FirebaseContext = createContext(null);
-
-// export const FirebaseProvider = ({ children }) => {
-//   const [user, setUser] = useState(null);
-
-//   return (
-//     <FirebaseContext.Provider value={{ auth, db, user, setUser }}>
-//       {children}
-//     </FirebaseContext.Provider>
-//   );
-// };
 import React, { createContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth"; // Import signOut
 import { auth, db } from "../firebase/config";

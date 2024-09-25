@@ -12,12 +12,22 @@ const Login = () => {
   const { auth } = useContext(FirebaseContext);
   const navigate = useNavigate();
 
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     // Input validation
     if (!email || !password) {
       toast.error("Email and password are required!");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
       return;
     }
 
@@ -26,7 +36,9 @@ const Login = () => {
       toast.success("Logged in successfully!");
       navigate("/"); 
     } catch (error) {
-      const errorMessage = error.code ? error.code.split('/')[1].split('-').join(" ") : "Login failed. Please try again.";
+      const errorMessage = error.code 
+        ? error.code.split('/')[1].split('-').join(" ") 
+        : "Login failed. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -37,7 +49,7 @@ const Login = () => {
 
   return (
     <div className="loginParentDiv">
-      <img width="200px"  src={Logo} alt="OLX Logo" />
+      <img width="200px" src={Logo} alt="OLX Logo" />
       <form onSubmit={handleLogin}>
         <label htmlFor="email">Email</label>
         <input
@@ -48,7 +60,7 @@ const Login = () => {
           id="email"
           name="email"
           placeholder="Enter your email"
-          required
+          
         />
         <label htmlFor="password">Password</label>
         <input
@@ -59,7 +71,7 @@ const Login = () => {
           id="password"
           name="password"
           placeholder="Enter your password"
-          required
+          
         />
         <button type="submit">Login</button>
       </form>

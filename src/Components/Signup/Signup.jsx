@@ -16,16 +16,43 @@ const SignUp = () => {
   const { auth, db } = useContext(FirebaseContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => { 
+  // Validation function
+  const validateForm = () => {
+    if (!username) {
+      toast.error("Username is required.");
+      return false;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailPattern.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+    if (!phone || phone.length < 10) {
+      toast.error("Please enter a valid phone number (at least 10 digits).");
+      return false;
+    }
+    if (!password || password.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    // Validate the form before submission
+    if (!validateForm()) {
+      return; // Stop the submission if validation fails
+    }
+
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       const user = result.user;
       console.log("User created:", user);
 
       // Add user to Firestore
-      const userCollectionRef = collection(db, "users"); // Make sure the collection name is correct
+      const userCollectionRef = collection(db, "users"); // Ensure the collection name is correct
       await addDoc(userCollectionRef, {
         uid: user.uid,
         username,
@@ -35,10 +62,10 @@ const SignUp = () => {
         createdAt: new Date(),
       });
 
+      toast.success("Signup successful! Redirecting to login...");
       console.log("Profile updated and user data saved successfully!");
       navigate("/login");
     } catch (error) {
-      // Handle error more robustly
       const errorMessage = error.code 
         ? error.code.split('/')[1].split('-').join(" ") 
         : "An error occurred during signup.";
@@ -92,8 +119,8 @@ const SignUp = () => {
           placeholder="Enter your password"
         />
         <button type="submit">Signup</button>
+        <a href="/login">Login</a>
       </form>
-      <a href="/login">Login</a>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import OlxLogo from '../../assets/OlxLogo';
@@ -7,10 +7,19 @@ import Arrow from '../../assets/Arrow';
 import SellButton from '../../assets/SellButton';
 import SellButtonPlus from '../../assets/SellButtonPlus';
 import { FirebaseContext } from "../../Context/Context";
+import ThemeToggle from '../../Components/ThemeToggle/ThemeToggle'
+import { ThemeProvider ,useTheme } from '../../Context/ThemeContext';
 
 const Header = ({ setSearch }) => {
   const navigate = useNavigate();
   const { user, logout } = useContext(FirebaseContext); // Ensure user is from context
+
+  const { isDarkTheme } = useTheme();
+
+  useEffect(() => {
+    document.body.className = isDarkTheme ? 'dark' : 'light';
+  }, [isDarkTheme]);
+
 
   const handleLogout = async () => {
     try {
@@ -61,6 +70,11 @@ const Header = ({ setSearch }) => {
           <span>ENGLISH</span>
           <Arrow />
         </div>
+
+        <div className="language">
+          <ThemeToggle/>
+        </div>
+        
         <div className="loginPage">
           {user ? (
             <span

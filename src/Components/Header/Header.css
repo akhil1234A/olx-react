@@ -2,9 +2,11 @@
   padding: 10px;
   background-color: whitesmoke;
   position: fixed;
-  width: 97vw;
+  width: 99vw;
   z-index: 999;
   top:0;
+  left: 0;
+
 }
 
 .headerChildDiv {
@@ -14,8 +16,9 @@
   align-items: center;
 }
 
+
+
 .placeSearch {
-  width: 16em;
   height: 48px;
   display: flex;
   align-items: center;
@@ -85,6 +88,11 @@
   display: flex;
   align-items: center;
 }
+
+.darkmode{
+  margin-bottom: 20px;
+}
+
 
 .language span {
   /* justify-content: space-between;
@@ -157,9 +165,32 @@
 }
 
 @media only screen and (max-width: 700px) {
-  .placeSearch,
-  .productSearch,
-  .sellMenu {
-    display: none;
+ 
+  .placeSearch{
+    margin-bottom: 20px;
+    width: 80%;
   }
+
+  .loginPage{
+    margin-bottom: 20px;
+  }
+
+  .sellMenu{
+    margin-bottom: 10px;
+  }
+
+  .language, .productSearch, .placeSearch, .loginPage{
+    display: none; 
+  }
+
+  .headerChildDiv {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start; /* Align items to start */
+  }
+
+  .brandName {
+    margin-bottom: 10px; /* Add space between brand and other elements */
+  }
+
+  
 }
